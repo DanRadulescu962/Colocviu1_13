@@ -1,8 +1,11 @@
 package ro.pub.cs.systems.eim.Colocviu1_13;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +43,15 @@ public class Colocviu1_13MainActivity extends AppCompatActivity {
                     txt4.append(", SOUTH");
                     pressed += 1;
                     break;
+                case R.id.navigate:
+                    Intent intent = new Intent(getApplicationContext(), Colocviu1_13SecondaryActivity.class);
+                    EditText txt5 = findViewById(R.id.content);
+                    intent.putExtra("suma", txt5.getText().toString());
+                    intent.setAction("actiune_mare");
+                    pressed = 0;
+                    txt5.setText("");
+                    startActivityForResult(intent, 2020);
+                    break;
             }
         }
     }
@@ -61,6 +73,16 @@ public class Colocviu1_13MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2020) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getApplicationContext(), (String) data.getExtras().get("buton"), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colocviu1_13_main);
@@ -69,10 +91,12 @@ public class Colocviu1_13MainActivity extends AppCompatActivity {
         Button south = findViewById(R.id.south);
         Button west = findViewById(R.id.west);
         Button east = findViewById(R.id.east);
+        Button nav = findViewById(R.id.navigate);
         MyClickListener lst = new MyClickListener();
         north.setOnClickListener(lst);
         south.setOnClickListener(lst);
         east.setOnClickListener(lst);
         west.setOnClickListener(lst);
+        nav.setOnClickListener(lst);
     }
 }
